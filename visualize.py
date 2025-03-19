@@ -45,10 +45,13 @@ def write_video(video, fps, size, path):
     out = cv2.VideoWriter(path, cv2.CAP_FFMPEG, fourcc, fps, size)
     for frame in video:
         out.write(frame)
+    cv2.destroyAllWindows()
     out.release()
+    out = None
 
 
 def visualize(anno, video_path, out_path):
+    print(f"{video_path}, {out_path}")
     video = read_video(video_path)
     assert anno['frame_count']==len(video), '{} : anno {} video {}'.format(anno['video_id'], anno['frame_count'], len(video))
     assert anno['width']==video[0].shape[1] and anno['height']==video[0].shape[0],\

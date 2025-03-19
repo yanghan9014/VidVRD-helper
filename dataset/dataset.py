@@ -115,6 +115,24 @@ class Dataset(object):
         get raw annotation for a video
         """
         return self.annos[vid]
+        
+    def get_all_frame_triplets(self, vid):
+        anno = self.get_anno(vid)
+        all_frame_triplets = []
+
+        for i, f in enumerate(anno['trajectories']):
+            single_frame_triplets = dict()
+            for x in f:
+                x['bbox'] = (x['bbox']['xmin'], x['bbox']['ymin'], x['bbox']['xmax'], x['bbox']['ymax'])
+                x['rels'] = []
+                for r in anno['relation_instances']:
+                    if r['subject_tid']==x['tid'] and r['begin_fid']<=i<r['end_fid']:
+                        x['rels'].append((r['predicate'], r['object_tid']))
+                del x['generated']
+                del x['tracker']
+                single_frame_triplets[x.pop('tid')] = x
+            all_frame_triplets.append(single_frame_triplets)
+        return all_frame_triplets
 
     def get_object_insts(self, vid):
         """

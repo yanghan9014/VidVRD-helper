@@ -54,7 +54,7 @@ if __name__ == '__main__':
     parser = ArgumentParser(description='Generate a single JSON groundtruth file for VidOR')
     parser.add_argument('split', choices=['training', 'validation'], 
                         help='which dataset split the groundtruth generated for')
-    parser.add_argument('task', choices=['object', 'action', 'relation'],
+    parser.add_argument('task', choices=['object', 'action', 'relation', 'frame'],
                         help='which task the groundtruth generated for')
     parser.add_argument('output', type=str, help='Output path')
     args = parser.parse_args()
@@ -71,6 +71,8 @@ if __name__ == '__main__':
             gt = dataset.get_action_insts(ind)
         elif args.task=='relation':
             gt = dataset.get_relation_insts(ind)
+        elif args.task=='frame':
+            gt = dataset.get_all_frame_triplets(ind)
         gts[ind] = gt
     
     with open(args.output, 'w') as fout:
