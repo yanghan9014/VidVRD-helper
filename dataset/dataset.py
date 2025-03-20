@@ -123,7 +123,7 @@ class Dataset(object):
         video_info['fps'] = anno['fps']
         video_info['height'] = anno['height']
         video_info['width'] = anno['width']
-        video_info['subject/objects'] = anno['subject/objects']
+        video_info['tid2soid'] = {obj['tid']: self.so2soid[obj['category']] for obj in anno['subject/objects']}
 
         all_frame_triplets = []
         for i, f in enumerate(anno['trajectories']):
@@ -133,7 +133,7 @@ class Dataset(object):
                 x['rels'] = []
                 for r in anno['relation_instances']:
                     if r['subject_tid']==x['tid'] and r['begin_fid']<=i<r['end_fid']:
-                        x['rels'].append((r['predicate'], r['object_tid']))
+                        x['rels'].append((self.pred2pid[r['predicate']], r['object_tid']))
                 del x['generated']
                 del x['tracker']
                 single_frame_triplets[x.pop('tid')] = x

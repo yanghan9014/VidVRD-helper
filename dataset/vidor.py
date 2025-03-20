@@ -64,6 +64,7 @@ if __name__ == '__main__':
     index = dataset.get_index(args.split)
 
     gts = dict()
+    gts['videos'] = dict()
     for ind in index:
         if args.task=='object':
             gt = dataset.get_object_insts(ind)
@@ -73,8 +74,7 @@ if __name__ == '__main__':
             gt = dataset.get_relation_insts(ind)
         elif args.task=='frame':
             gt = dataset.get_all_frame_triplets(ind)
-        gts[ind] = gt
-    
+        gts['videos'][ind] = gt
     gts['soid2so'] = dataset.soid2so
     gts['so2soid'] = dataset.so2soid
     gts['pid2pred'] = dataset.pid2pred
