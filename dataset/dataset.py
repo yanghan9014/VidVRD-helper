@@ -3,7 +3,7 @@ import json
 from collections import defaultdict
 
 from tqdm import tqdm
-
+import pdb
 
 class Dataset(object):
     """
@@ -118,8 +118,14 @@ class Dataset(object):
         
     def get_all_frame_triplets(self, vid):
         anno = self.get_anno(vid)
-        all_frame_triplets = []
+        video_info = dict()
+        video_info['frame_count'] = anno['frame_count']
+        video_info['fps'] = anno['fps']
+        video_info['height'] = anno['height']
+        video_info['width'] = anno['width']
+        video_info['subject/objects'] = anno['subject/objects']
 
+        all_frame_triplets = []
         for i, f in enumerate(anno['trajectories']):
             single_frame_triplets = dict()
             for x in f:
@@ -132,7 +138,8 @@ class Dataset(object):
                 del x['tracker']
                 single_frame_triplets[x.pop('tid')] = x
             all_frame_triplets.append(single_frame_triplets)
-        return all_frame_triplets
+        video_info['framewise'] = all_frame_triplets
+        return video_info
 
     def get_object_insts(self, vid):
         """
